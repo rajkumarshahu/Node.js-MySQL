@@ -1,5 +1,10 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var Table = require('cli-table');
+var table = new Table({
+  head: ['ID', 'Product Name', 'Department', 'Price', 'Quantity']
+, colWidths: [10, 30, 15, 10, 10]
+});
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -11,12 +16,13 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
   if (err) throw err;
-  console.log(
-    "\n-------------------------Welcome to BAMAZON-------------------------"
-  );
+
 });
 
 function askManager() {
+    console.log(
+        "\n-------------------------Welcome to BAMAZON-------------------------\n"
+      );
   inquirer
     .prompt([
       {
@@ -34,8 +40,10 @@ function askManager() {
     .then(function(response) {
       if (response.menu == "View Products for Sale") {
         queryAllProducts();
+        askManager();
       } else if (response.menu == "View Low Inventory") {
         getProductsLowerThanFive();
+        askManager();
       } else if (response.menu == "Add to Inventory") {
         connection.query("SELECT * FROM products", function(err, res) {
           if (err) {
@@ -99,12 +107,55 @@ function askManager() {
                     if (err) {
                       console.log("Error occured: " + err);
                     } else {
-                      console.log("Updated succesfully!!!");
+                      console.log("Quantity of product ID ",response.item_id, " updated succesfully!!!");
+                      askManager();
                     }
                   }
                 );
               });
           }
+        });
+      }else if(response.menu == "Add New Product"){
+        inquirer.prompt([
+            {
+                type:"input",
+                name:"product_name",
+                message:"Enter name of the product: "
+            },
+            {
+                type:"input",
+                name:"department_name",
+                message:"Enter department of the product: "
+            },
+            {
+                type:"input",
+                name:"price",
+                message:"Enter price of the product: "
+            },
+            {
+                type:"input",
+                name:"stock_quantity",
+                message:"Enter quantity of the product: "
+            }
+        ])
+        .then(function addNewProduct(response) {
+            connection.query(
+                "INSERT INTO products SET ?",
+                {
+                    product_name: response.product_name,
+                    department_name: response.department_name,
+                    price: response.price,
+                    stock_quantity: response.stock_quantity
+                },
+                function (err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log(response.product_name, " has been added!");
+                        askManager();
+                    };
+                }
+            );
         });
       }
     });
@@ -114,26 +165,15 @@ function queryAllProducts() {
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
     console.log(
-      "-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x"
+      "\n-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x"
     );
     for (var i = 0; i < res.length; i++) {
-      console.log(
-        res[i].item_id +
-          " | " +
-          res[i].product_name +
-          " | " +
-          res[i].department_name +
-          " | " +
-          res[i].price +
-          " | " +
-          res[i].stock_quantity
-      );
-      console.log(
-        "--------------------------------------------------------------------"
-      );
+      table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
     }
+    console.log(table.toString());
+    console.log()
     console.log(
-      "-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x"
+      "\n\n-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x\n"
     );
   });
 }
@@ -145,26 +185,15 @@ function getProductsLowerThanFive() {
     function(err, res) {
       if (err) throw err;
       console.log(
-        "-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x"
+        "\n-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x"
       );
       for (var i = 0; i < res.length; i++) {
-        console.log(
-          res[i].item_id +
-            " | " +
-            res[i].product_name +
-            " | " +
-            res[i].department_name +
-            " | " +
-            res[i].price +
-            " | " +
-            res[i].stock_quantity
-        );
-        console.log(
-          "--------------------------------------------------------------------"
-        );
+        table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
       }
+      console.log(table.toString());
+
       console.log(
-        "-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x"
+        "\n\n-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x\n"
       );
     }
   );
