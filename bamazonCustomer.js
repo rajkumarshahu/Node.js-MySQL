@@ -1,8 +1,9 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+const chalk = require('chalk');
 var Table = require('cli-table');
 var table = new Table({
-  head: ['ID', 'Product Name', 'Department', 'Price', 'Quantity']
+  head: [chalk.hex('#DEADED').bold('ID'), chalk.hex('#DEADED').bold('Product Name'), chalk.hex('#DEADED').bold('Department'), chalk.hex('#DEADED').bold('Price'), chalk.hex('#DEADED').bold('Quantity')]
 , colWidths: [10, 40, 15, 10, 10]
 });
 
@@ -16,21 +17,21 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if (err) throw err;
-    console.log("\n-------------------------Welcome to BAMAZON-------------------------");
+    console.log(chalk.bold.rgb(10, 100, 200)("\n-------------------------------------- Welcome to BAMAZON--------------------------------------"));
     //queryAllProducts()
 });
 
 function queryAllProducts() {
     connection.query("SELECT * FROM products", function(err, res) {
       if (err) throw err;
-      console.log("-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x");
+
       console.log
 
       for (var i = 0; i < res.length; i++) {
         table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
       }
-      console.log(table.toString());
-      console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x");
+      console.log(chalk.bgBlackBright(table.toString()));
+
       askForProductID(res)
     });
   }
@@ -41,7 +42,7 @@ function queryAllProducts() {
         {
           type: "input",
           name: "choice",
-          message: "Please enter ID of the product you want to purchase (or enter 'e' to Exit)",
+          message: chalk.bold.rgb(10, 100, 100)("Please enter ID of the product you want to purchase (or enter 'e' to Exit)"),
           validate: function(ch) {
             return !isNaN(ch) || ch.toLowerCase() === "e";
           }
@@ -51,11 +52,13 @@ function queryAllProducts() {
         shouldExit(ch.choice);
         var choiceId = parseInt(ch.choice);
         var product = getProductIfExists(choiceId, stock);
-        if (product.stock_quantity > 0) {
+        if (product) {
           askForProductQuantity(product);
         }
         else {
-          console.log("\nSorry!!!\nThe product is out of stock.");
+
+          console.log(chalk.bgRed("\n-----------------------------Sorry!!!The product is out of stock.-----------------------------\n"));
+
           continueShopping();
         }
       });
@@ -67,7 +70,7 @@ function queryAllProducts() {
         {
           type: "input",
           name: "quantity",
-          message: "Please enter the quantity (or enter 'e' to Exit)",
+          message: chalk.bold.rgb(10, 100, 100)("Please enter the quantity (or enter 'e' to Exit)"),
           validate: function(val) {
             return val > 0|| val.toLowerCase() === "e";
           }
@@ -78,7 +81,7 @@ function queryAllProducts() {
         var quantity = parseInt(val.quantity);
         if (quantity > product.stock_quantity) {
 
-          console.log("\nInsufficient quantity!");
+          console.log(chalk.bgRed("\n---------------------------------------Insufficient quantity!---------------------------------------"));
           continueShopping();
         }
         else {
@@ -93,24 +96,15 @@ function queryAllProducts() {
       "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?",
       [quantity, product.item_id],
       function(err, res) {
-        console.log(res);
+        //console.log(res);
         var table1 = new Table({
-          head: ["   Successfully purchased product with id "  + product.item_id ]
+          head: [chalk.bgGreen(chalk.white("                     Successfully purchased product with id "  + product.item_id+"       " ))]
         , colWidths: [75]
         });
 
-        table1.push(["   Your total cost is " + "$"+Math.round(quantity * product.price)])
-        //queryAllProducts();
-        console.log("\n\n",table1.toString());
-
-        //askForProductID(res);
+        table1.push(["                        Your total cost is " + "$"+Math.round(quantity * product.price)+"         "])
+        console.log(chalk.bgGreen("\n\n",table1.toString()));
         continueShopping();
-
-        // console.log("-------------------------------------------------------");
-        // console.log("| Successfully purchased " + quantity + " " + product.product_name + "|");
-        // console.log("| Your total cost is " + "$"+quantity * product.price + "|");
-        // console.log("-------------------------------------------------------\n");
-
       }
 
     );
@@ -128,7 +122,7 @@ function queryAllProducts() {
 
       function shouldExit(choice) {
         if (choice.toLowerCase() === "e") {
-          console.log("Thank you for buying at BAMAZON!!!");
+          console.log(chalk.bold.rgb(10, 100, 200)("\n------------------------Thank you for buying at BAMAZON!!!------------------------\n"));
           process.exit(0);
         }
       }
