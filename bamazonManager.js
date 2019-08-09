@@ -1,10 +1,10 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require('cli-table');
-var table = new Table({
-  head: ['ID', 'Product Name', 'Department', 'Price', 'Quantity']
-, colWidths: [10, 30, 15, 10, 10]
-});
+// var table = new Table({
+//   head: ['ID', 'Product Name', 'Department', 'Price', 'Quantity']
+// , colWidths: [10, 30, 15, 10, 10]
+// });
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -34,16 +34,15 @@ function askManager() {
           "View Low Inventory",
           "Add to Inventory",
           "Add New Product",
+          "Exit",
         ],
       },
     ])
     .then(function(response) {
       if (response.menu == "View Products for Sale") {
         queryAllProducts();
-        askManager();
       } else if (response.menu == "View Low Inventory") {
         getProductsLowerThanFive();
-        askManager();
       } else if (response.menu == "Add to Inventory") {
         connection.query("SELECT * FROM products", function(err, res) {
           if (err) {
@@ -157,6 +156,9 @@ function askManager() {
                 }
             );
         });
+      } else if (response.menu == 'Exit') {
+        console.log("Good Bye.See you soon");
+        process.exit(0);
       }
     });
 }
@@ -164,17 +166,16 @@ function askManager() {
 function queryAllProducts() {
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
-    console.log(
-      "\n-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x"
-    );
+
+    var table = new Table({
+      head: ['ID', 'Product Name', 'Department', 'Price', 'Quantity']
+    , colWidths: [10, 30, 15, 10, 10]
+    });
     for (var i = 0; i < res.length; i++) {
       table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
     }
     console.log(table.toString());
-    console.log()
-    console.log(
-      "\n\n-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x\n"
-    );
+    askManager();
   });
 }
 
@@ -184,17 +185,16 @@ function getProductsLowerThanFive() {
     [5],
     function(err, res) {
       if (err) throw err;
-      console.log(
-        "\n-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x"
-      );
+
+      var table = new Table({
+        head: ['ID', 'Product Name', 'Department', 'Price', 'Quantity']
+      , colWidths: [10, 30, 15, 10, 10]
+      });
       for (var i = 0; i < res.length; i++) {
         table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
       }
       console.log(table.toString());
-
-      console.log(
-        "\n\n-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x\n"
-      );
+      askManager();
     }
   );
 }
