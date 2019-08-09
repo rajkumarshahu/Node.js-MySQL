@@ -2,8 +2,9 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 const chalk = require('chalk');
 var Table = require('cli-table');
+var headColor = chalk.hex('#DEADED').bold;
 var table = new Table({
-  head: [chalk.hex('#DEADED').bold('ID'), chalk.hex('#DEADED').bold('Product Name'), chalk.hex('#DEADED').bold('Department'), chalk.hex('#DEADED').bold('Price'), chalk.hex('#DEADED').bold('Quantity')]
+  head: [headColor('ID'), headColor('Product Name'), headColor('Department'), headColor('Price'), headColor('Quantity')]
 , colWidths: [10, 40, 15, 10, 10]
 });
 
@@ -138,7 +139,7 @@ function queryAllProducts() {
             if (response.continue.toLowerCase() === 'y')
             queryAllProducts()
             else {
-                console.log("Good Bye.See you soon");
+                console.log(console.log(chalk.bold.rgb(10, 100, 200)("------------------------Thank you for shopping with BAMAZON.------------")));
                 process.exit(0);
             }
         });

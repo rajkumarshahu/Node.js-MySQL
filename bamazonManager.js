@@ -2,6 +2,7 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 const chalk = require('chalk');
 var Table = require('cli-table');
+var headColor = chalk.hex('#DEADED').bold;
 
 
 var connection = mysql.createConnection({
@@ -153,7 +154,8 @@ function askManager() {
             );
         });
       } else if (response.menu == 'Exit') {
-        console.log("Good Bye.See you soon");
+        console.log(chalk.bold.rgb(10, 100, 200)("\n---------------------------- Thank you for managing BAMAZON.----------------------------"));
+        console.log(chalk.bold.rgb(10, 100, 200)("\n------------------------------------- See you later.-------------------------------------"));
         process.exit(0);
       }
     });
@@ -164,7 +166,7 @@ function queryAllProducts() {
     if (err) throw err;
 
     var table = new Table({
-      head: [chalk.hex('#DEADED').bold('ID'), chalk.hex('#DEADED').bold('Product Name'), chalk.hex('#DEADED').bold('Department'), chalk.hex('#DEADED').bold('Price'), chalk.hex('#DEADED').bold('Quantity')]
+      head: [headColor('ID'), headColor('Product Name'), headColor('Department'), headColor('Price'), headColor('Quantity')]
     , colWidths: [10, 40, 15, 10, 10]
     });
     for (var i = 0; i < res.length; i++) {
@@ -182,7 +184,7 @@ function getProductsLowerThanFive() {
     function(err, res) {
       if (err) throw err;
       var table = new Table({
-        head: [chalk.hex('#DEADED').bold('ID'), chalk.hex('#DEADED').bold('Product Name'), chalk.hex('#DEADED').bold('Department'), chalk.hex('#DEADED').bold('Price'), chalk.hex('#DEADED').bold('Quantity')]
+        head: [headColor('ID'), headColor('Product Name'), headColor('Department'), headColor('Price'), headColor('Quantity')]
       , colWidths: [10, 40, 15, 10, 10]
       });
       for (var i = 0; i < res.length; i++) {

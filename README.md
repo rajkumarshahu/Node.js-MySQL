@@ -34,12 +34,18 @@
 
 * [Install node.js](https://nodejs.org/en/download/)
 
+* 95 columns and 40 rows of minimum terminal window size for better terminal UI.
+
 ## Running app
 
 ```sh
 cd Node.js-MySQL
 
 npm install (to install dependencies)
+
+node bamazonCustomer.js (to run BamazonCustomer)
+
+node bamazonManager.js (to run BamazonManager)
 ```
 
 ## Packages used
