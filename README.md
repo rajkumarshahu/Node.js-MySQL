@@ -4,9 +4,27 @@
 
 * BamazonCustomer is a Amazon-like storefront. The app is capable of taking in orders from customers and deplete stock from the store's inventory.
 
-## Demo Video
+## Demo Video (BamazonCustomer)
 
 [![asciicast](https://asciinema.org/a/UsM5YAeAWJE6QU5i8aGKb0aoL.svg)](https://asciinema.org/a/UsM5YAeAWJE6QU5i8aGKb0aoL)
+
+## Overview of bamazonManager.js
+
+* BamazonManager is a Amazon-like storefront used by product managers. Running this application will:
+
+  * List a set of menu options:
+
+    * View Products for Sale
+
+    * View Low Inventory
+
+    * Add to Inventory
+
+    * Add New Product
+
+## Demo Video (BamazonManager)
+
+[![asciicast](https://asciinema.org/a/Ls6a9xDqcZyJeLd9smZqt57e4.svg)](https://asciinema.org/a/Ls6a9xDqcZyJeLd9smZqt57e4)
 
 ## Getting Started
 

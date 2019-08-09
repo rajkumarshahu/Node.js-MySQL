@@ -2,10 +2,7 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 const chalk = require('chalk');
 var Table = require('cli-table');
-// var table = new Table({
-//   head: ['ID', 'Product Name', 'Department', 'Price', 'Quantity']
-// , colWidths: [10, 30, 15, 10, 10]
-// });
+
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -21,9 +18,7 @@ connection.connect(function(err) {
 });
 
 function askManager() {
-    console.log(
-        "\n-------------------------Welcome to BAMAZON-------------------------\n"
-      );
+  console.log(chalk.bold.rgb(10, 100, 200)("\n-------------------------------------- Welcome to BAMAZON--------------------------------------"));
   inquirer
     .prompt([
       {
@@ -169,13 +164,13 @@ function queryAllProducts() {
     if (err) throw err;
 
     var table = new Table({
-      head: ['ID', 'Product Name', 'Department', 'Price', 'Quantity']
-    , colWidths: [10, 30, 15, 10, 10]
+      head: [chalk.hex('#DEADED').bold('ID'), chalk.hex('#DEADED').bold('Product Name'), chalk.hex('#DEADED').bold('Department'), chalk.hex('#DEADED').bold('Price'), chalk.hex('#DEADED').bold('Quantity')]
+    , colWidths: [10, 40, 15, 10, 10]
     });
     for (var i = 0; i < res.length; i++) {
       table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
     }
-    console.log(table.toString());
+    console.log(chalk.bgBlackBright(table.toString()));
     askManager();
   });
 }
@@ -186,15 +181,14 @@ function getProductsLowerThanFive() {
     [5],
     function(err, res) {
       if (err) throw err;
-
       var table = new Table({
-        head: ['ID', 'Product Name', 'Department', 'Price', 'Quantity']
-      , colWidths: [10, 30, 15, 10, 10]
+        head: [chalk.hex('#DEADED').bold('ID'), chalk.hex('#DEADED').bold('Product Name'), chalk.hex('#DEADED').bold('Department'), chalk.hex('#DEADED').bold('Price'), chalk.hex('#DEADED').bold('Quantity')]
+      , colWidths: [10, 40, 15, 10, 10]
       });
       for (var i = 0; i < res.length; i++) {
         table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
       }
-      console.log(table.toString());
+      console.log(chalk.bgBlackBright(table.toString()));
       askManager();
     }
   );
