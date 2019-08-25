@@ -6,7 +6,7 @@
 
 ## Demo Video (BamazonCustomer)
 
-[![asciicast](https://asciinema.org/a/UsM5YAeAWJE6QU5i8aGKb0aoL.svg)](https://asciinema.org/a/UsM5YAeAWJE6QU5i8aGKb0aoL)
+[![asciicast](https://asciinema.org/a/S3DebntTEVN8VuGnEsGVeU2Ac.svg)](https://asciinema.org/a/S3DebntTEVN8VuGnEsGVeU2Ac)
 
 ## Overview of bamazonManager.js
 
@@ -24,7 +24,7 @@
 
 ## Demo Video (BamazonManager)
 
-[![asciicast](https://asciinema.org/a/Ls6a9xDqcZyJeLd9smZqt57e4.svg)](https://asciinema.org/a/Ls6a9xDqcZyJeLd9smZqt57e4)
+[![asciicast](https://asciinema.org/a/xeUX0EKX9eQiCQ4VgAntDhxDP.svg)](https://asciinema.org/a/xeUX0EKX9eQiCQ4VgAntDhxDP)
 
 ## Getting Started
 
